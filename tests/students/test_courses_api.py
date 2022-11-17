@@ -24,14 +24,14 @@ def course_factory():
     return factory
 
 
-# @pytest.mark.django_db  # Генерируем и проверяем курс по URL и id
-# def test_get_course(client, student_factory, course_factory):
-#     course = course_factory(_quantity=1)
-#     response = client.get('/api/v1/courses/1/')
-#
-#     assert response.status_code == 200
-#     data = response.json()
-#     assert data['id'] == 1
+@pytest.mark.django_db  # Генерируем и проверяем курс по URL и id
+def test_get_course(client, student_factory, course_factory):
+    course = course_factory(_quantity=1)
+    response = client.get(f'/api/v1/courses/{course[0].id}/')
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data['id'] == course[0].id
 #
 #
 # @pytest.mark.django_db  # Генерируем и проверяем список курсов
@@ -78,9 +78,9 @@ def course_factory():
 #     response = client.post('/api/v1/courses/', {'name': c_name})
 #
 #     assert response.status_code == 201
-#     response = client.get('/api/v1/courses/')
 #     data = response.json()
-#     assert data[0]['name'] == c_name
+#
+#     assert data['name'] == c_name
 #
 #
 # @pytest.mark.django_db   # Проверка успешного изменения курса
@@ -96,11 +96,9 @@ def course_factory():
 #     response2 = client.patch('/api/v1/courses/1/', {'name': c_name})
 #
 #     assert response2.status_code == 200
+#     data2 = response2.json()
 #
-#     response3 = client.get('/api/v1/courses/')
-#     data = response3.json()
-#
-#     assert data[0]['name'] == c_name  # проверяем изменение
+#     assert data2['name'] == c_name  # проверяем изменение
 #
 #
 # @pytest.mark.django_db  # Проверка удаления
